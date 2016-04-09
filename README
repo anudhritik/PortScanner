@@ -1,0 +1,77 @@
+
+==========================================================================================
+# Project 4: PortScanner
+==========================================================================================
+
+Name:  Anudhriti Reddy Katanguri
+uname: anukatan
+
+Name:  Abdul Mudabir Siraj Patel
+uname: abdpatel
+
+
+==========================================================================================
+# How to compile
+==========================================================================================
+
+$ make
+
+* remove object files & executable
+	$ make clean
+
+
+==========================================================================================
+# Code refactor
+==========================================================================================
+* can the "set<int> ports_set" be included in the ArgsParser class instead of being in global scope ? (NOT LIKELY)
+* can reduce number of variables in parse_prefixes by passing args to convert_endianness() by &
+* use enums or some data structure for scans
+* separate function call in main() for printing inventory of IPs, scans, ports
+* gettimeofday() for time difference might take lesser lines
+
+==========================================================================================
+# TEST CASES for cli args parsing
+==========================================================================================
+* remove duplicates by using STL set containers (DONE)
+	** test case: ./portScanner --ports 65-70,80,67-9
+	** case for IPs: ./portScanner --ip 129.79.247.3 --prefix 129.79.247.87/24
+* "--ports "
+	** default ports 1-1024 if not specified (DONE)
+	** reject input "--ports -23" (DONE)
+	** reject input "--ports 1-10,-42,90-100" (DONE)
+	** reject input "--ports -27-40" (DONE)
+	** reject input "--ports 12--90" (DONE)
+	** reject input "--ports 23-0,47" (DONE)
+	** allow input "--ports 12-12,915" (DONE)
+	** reject input: ./portScanner --ports 1, 2, 3 - 1000 --ip 74.125.225.68 (NOT DONE)
+	** reject input: ./portScanner --port SYN (NOT DONE)
+	** reject ports greater than 65535 or ports less than equal to 0 (DONE)
+* can ipAddresses.txt file contain IP prefixes too ? (yes, DONE)
+* validate correct IP and correct prefix with "--prefix" (IP check same as that for "--ip")
+	** no IP addresses specified by user (DONE)
+	** reject "--ip 17" (DONE)
+	** reject input like 127.2.3.54.79 (invalid coz 5 octets) (DONE)
+	** reject IP prefix like 172.16/12 (DONE)
+	** reject input like 0.1.2.3 (Invalid IP addr coz reserved) and thus, ignore IETF & IANA specified reserved IP addresses (had to recall attempt to do this; coz list should be huge, generating it throws std::bad_alloc() error, then aborts) ( TO DO )
+	** reject input like "-129.-42.8.-3" (DONE, gethostbyname() naturally does this)
+	** reject prefix 127.0.0.1/24/16 ( TO DO )
+	** reject "--ip 127.b0.4A.1" ( DONE, by gethostbyname() )
+	** reject "--prefix -127.0.0.-2/24" ( DONE, by inet_aton() )
+	** reject input: ./portScanner --ports 1,2,3 --ip "74.125.225.68" --speedup 5 ( TO DO )
+	** allow: ./portScanner --ip localhost --ports 23,47,2 (DONE)
+	** validate lead_bits which cannot be greater than 32 or less than 0 (NOT DONE)
+* "--file filename"
+	** reject file line like "159.23.1.24 	hi there 172.68.42.23" (DONE)
+	** ignore new lines in 'filename' but consider other IPs in it (NOT DONE)
+* "--speedup "
+	** negative number or '0' number of threads check ? (DONE)
+	** float entered for number of threads, check ? (DONE, accept it and let int round it down)
+	** string entered for number of threads, check ? (DONE)
+* "--scan "
+	** reject input "--scan hello" (DONE)
+	** reject input "--scan SYN XMAS2014 FIN" (DONE)
+	** accept lowercase scan types "--scan syn xmas NULL" (DONE)
+	** reject input: ./portScanner --ports 1,2 --ip 74.125.225.68 --speedup 5 --scan "UDP SYN" (DONE)
+	** reject input: ./portScanner --ports 1,2 --ip 74.125.225.68 --speedup 5 --scan UDP, SYN (DONE)
+	** fix case: if "--scan UDP XMAS" is not at the end, input is not accepted (DONE)
+	** reject input: ./portScanner --ip tank.soic.indiana.edu --scan SYN NULL FIN --speedup (DONE)

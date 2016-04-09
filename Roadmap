@@ -1,0 +1,33 @@
+
+==========================================================================================
+# Milestone1
+==========================================================================================
+* be able to parse all command line arguments, read IP addresses
+from input files, and convert the supplied IP prefixes to a list of individual IP addresses
+	• --help. Example: “./portScanner --help”.
+	• --ports <ports to scan>. Example: “./portScanner --ports 1,2,3-5”.
+	• --ip <IP address to scan>. Example: “./portScanner --ip 127.0.0.1”.
+	• --prefix <IP prefix to scan>. Example: “./portScanner --prefix 127.143.151.123/24”.
+	• --file <file name containing IP addresses to scan>. Example: “./portScanner --file filename.txt”.
+	• --speedup <parallel threads to use>. Example: “./portScanner --speedup 10”.
+	• --scan <one or more scans>. Example: “./portScanner --scan SYN NULL FIN XMAS”.
+* print out to the terminal the list of IP addresses that the program was supplied with
+* add verbose mode ?
+
+==========================================================================================
+# For the final Submission
+==========================================================================================
+
+	• scan one port using SYN scan (figure out how to construct packets to scan ports with)
+		** figure how to use TCP header (either write one or use one from "tcp.h")
+		** send tcp header to one IP (SYN)
+		** figure how to receive packet (SYN/ACK)
+	• scan using other scan technique (follow each scan type's procedure coz they differ)
+	• creating and using raw sockets
+	• how to scan UDP sockets
+	• how to figure out status of ports (open, closed, filtered, open | filtered, unfiltered), figure out analyzing incoming packets resulting from port scan
+	• scale from one port scan to multiple port scan by looping scan types for each new port
+	• recognize services running on ports ( SSH, HTTP, SMTP, POP, IMAP, and WHOIS )
+	• added multi-threading capability to program; use threads effectively
+	• testing at all stages of development
+	• display port scanner output in presentable form like the one in handout
